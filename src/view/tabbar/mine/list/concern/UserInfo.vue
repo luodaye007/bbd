@@ -54,14 +54,14 @@
       <div class="title">他的关注</div>
       <div class="item" v-for="(item,index) in userInfo.concerns" :key="index">
         <div class="left">
-          <van-image round width="1rem" height="1rem" :src="item.avatar" />
+          <van-image round width="1rem" height="1rem" :src="item.user.avatar" />
           <div class="right">
-            <div class="right-top">{{item.nickname}}</div>
+            <div class="right-top">{{item.user.nickname}}</div>
             <div class="right-bottom">
               信用
-              <span>{{item.credit}}</span>
+              <span>{{item.user.credit}}</span>
               评分
-              <span>{{item.rate}}</span>
+              <span>{{calculatRate(item.user.game_comments)}}</span>
             </div>
           </div>
         </div>
@@ -99,6 +99,13 @@ export default {
       });
       this.getUserInfo();
     },
+    calculatRate(data) {
+      let rate = 1.5;
+      data.forEach(item => {
+        rate += item.rate;
+      });
+      return rate / (data.length + 1);
+    },
     chat() {
       this.$store.commit("CHANGE_CHAT_LIST_TYPE", {
         type: "add",
@@ -122,7 +129,6 @@ export default {
       let data = {};
       data.username = this.$store.state.user.userInfo.username;
       data.concern_id = this.userInfo.username;
-      data.rate = this.userInfo.rate;
       //关注
       this.$toast.loading({
         mask: true,

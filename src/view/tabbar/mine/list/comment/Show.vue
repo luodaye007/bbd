@@ -44,7 +44,6 @@ export default {
         //console.log(res.data.comments);
         this.comments = res.data.comments;
         if (this.$route.query.game_id) {
-          const { game_id, rate_id, be_rate_id } = this.$route.query;
           this.$nextTick(() => {
             document
               .querySelector(`#comment_g${game_id}r${rate_id}b${be_rate_id}`)

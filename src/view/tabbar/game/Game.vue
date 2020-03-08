@@ -333,6 +333,14 @@ export default {
     deep: true
   },
   methods: {
+    calculatRate(data) {
+      //接受一个数组 为用户所有的评论 求和
+      let rate = 1.5;
+      data.forEach(item => {
+        rate += item.rate;
+      });
+      return rate / (data.length + 1);
+    },
     select(value, type) {
       this[type] = value;
     },
@@ -427,6 +435,8 @@ export default {
         this.page++;
 
         res.data.rows.forEach(element1 => {
+          //计算评分
+          element1.user.rate = this.calculatRate(element1.user.game_comments);
           this.concern.forEach(element2 => {
             if (element1.user.username == element2.concern_id) {
               element1.concernState = true;
@@ -456,42 +466,10 @@ export default {
         this.finished = this.list.length == this.count ? true : false;
       });
     },
-    // dropdownChange(val) {
-    //   this.list.length = 0;
-    //   this.page = 1;
-    //   this.count = 0;
-    //   this.getGame();
-    // },
     toDetail(game_id) {
       this.$router.push({ name: "ShowGame", query: { game_id: game_id } });
     },
-    // join(game_id) {
-    //   if (!this.$store.state.user.loginStatus) {
-    //     this.$toast("请先登录");
-    //     return;
-    //   } else {
-    //     let data = {};
-    //     data.game_id = game_id;
-    //     data.username = this.userInfo.username;
-    //     data.nickname = this.userInfo.nickname;
-    //     data.orientation = this.userInfo.orientation;
-    //     this.$store
-    //       .dispatch("joinGame", data)
-    //       .then(res => {
-    //         //console.log(res);
-    //         if (res.data.code) {
-    //           this.$toast("加入成功");
-    //         } else {
-    //           if (res.data.msg == "SequelizeUniqueConstraintError") {
-    //             this.$toast("您本是此赛事一员");
-    //           } else {
-    //             this.$toast.fail(res.data.msg);
-    //           }
-    //         }
-    //       })
-    //       .catch(reason => {});
-    //   }
-    // },
+
     appreciate(item, index, concernState) {
       if (!this.$store.state.user.loginStatus) {
         this.$toast("请先登录");
@@ -504,7 +482,6 @@ export default {
         let data = {};
         data.username = this.$store.state.user.userInfo.username;
         data.concern_id = item.username;
-        data.rate = item.rate;
         //关注
         this.$toast.loading({
           mask: true,

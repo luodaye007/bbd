@@ -134,6 +134,7 @@ export default {
         .then(() => {
           this.$store.dispatch("logOut").then(() => {
             this.$router.push({ name: "Game" });
+            this.$socket.disconnect();
           });
         })
         .catch(() => {

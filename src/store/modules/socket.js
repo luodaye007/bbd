@@ -11,6 +11,7 @@ const state = {
 
 // 定义 getters
 var getters = {
+    //主页上未读数量
     unread_num(state) {
         let count = 0;
         for (var i = 0; i < state.chat_list.length; i++) {
@@ -51,6 +52,50 @@ const mutations = {
             router.push({ name: 'Login' });
             Toast.fail('验证失败');
         })
+    },
+    socket_accept_offline_msg(state, data) {
+        //转化为map避免双重循环
+        //type为comment的是新的评论 要区分
+        let chatMessage = {};
+        data.forEach(item => {
+            let itemData = JSON.parse(item);
+            //取出所有的新消息
+            if (itemData.type === 'comment') {
+                itemData.unread = true;
+                state.comment_list.unshift(itemData);
+            } else {
+                //取出所有的聊天消息 以key-value形式保存 避免双重数组循环 判断key相同的就把这些消息插入到数组末端
+                if (chatMessage['msg_' + itemData.send_info.username]) {
+                    chatMessage['msg_' + itemData.send_info.username].push(itemData);
+                } else {
+                    chatMessage['msg_' + itemData.send_info.username] = [];
+                    chatMessage['msg_' + itemData.send_info.username].push(itemData);
+                }
+            }
+        })
+
+        state.chat_list.forEach(item => {
+            //聊天列表存在此聊天者的窗口
+            if (chatMessage['msg_' + item.username]) {
+                //找到key相同的就插入数组末端，并且设置未读信息条目
+                item.chat_list = item.chat_list.concat(chatMessage['msg_' + item.username]);
+                item.unread_num += chatMessage['msg_' + item.username].length;
+                delete chatMessage['msg_' + item.username];
+            }
+        })
+
+        //剩下的都是没有聊天窗口的 需要另开窗口
+        for (let key in chatMessage) {
+            let obj = {};
+            let message = chatMessage[key];
+            obj.avatar = message[0].send_info.avatar;
+            obj.username = message[0].send_info.username;
+            obj.nickname = message[0].send_info.nickname;
+            obj.tag = message[0].send_info.tag;
+            obj.unread_num = message.length;
+            obj.chat_list = message;
+            state.chat_list.unshift(obj);
+        }
     },
     socket_client_receive_msg(state, data) {
         //判断当前用户所在的页面是否是当前聊天用户的页面 如果是则未读信息不加1

@@ -16,7 +16,7 @@
             信用
             <span>{{item.user.credit}}</span>
             评分
-            <span>{{item.rate}}</span>
+            <span>{{calculatRate(item.user.game_comments)}}</span>
           </div>
         </div>
       </div>
@@ -43,6 +43,13 @@ export default {
   computed: {},
   watch: {},
   methods: {
+    calculatRate(data) {
+      let rate = 1.5;
+      data.forEach(item => {
+        rate += item.rate;
+      });
+      return rate / (data.length + 1);
+    },
     deConcern(item, index) {
       this.$dialog
         .confirm({

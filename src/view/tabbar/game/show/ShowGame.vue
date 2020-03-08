@@ -5,7 +5,7 @@
     <van-nav-bar :title="'赛事详情'" />
     <div class="show-header" v-if="game">
       <div class="show-header-left">
-        <van-image round width="1.2rem" height="1.2rem" :src="game.user.avatar" />
+        <van-image round width="1.2rem" height="1.2rem" :src="game.user.avatar" @click="showUser(game.user.username)" />
         <div class="show-header-left-inner">
           <span class="nickname">{{game.user.nickname}}</span>
           <div>
@@ -246,6 +246,10 @@ export default {
         name: "SoloChat",
         query: { username: this.game.user.username }
       });
+    },
+    showUser(username) {
+      //console.log(username);
+      this.$router.push({ name: "MineConcernUserInfo", query: { username } });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

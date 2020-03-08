@@ -129,7 +129,11 @@ export default {
           toast.clear();
           this.$toast("发表成功");
           //推送消息
-
+          this.member.forEach(item => {
+            item.type = "comment";
+            item.rate_avatar = this.userInfo.avatar;
+            item.rate_nickname = this.userInfo.nickname;
+          });
           this.$socket.emit("comment", this.member);
           setTimeout(() => {
             this.$router.back(-1);
