@@ -31,6 +31,7 @@
 <script>
 import VanNavBar from "@/components/VanNavBar";
 import { showConcern } from "@/api";
+import { calculatRate } from "@/utils";
 export default {
   components: {
     "van-nav-bar": VanNavBar
@@ -44,11 +45,7 @@ export default {
   watch: {},
   methods: {
     calculatRate(data) {
-      let rate = 1.5;
-      data.forEach(item => {
-        rate += item.rate;
-      });
-      return rate / (data.length + 1);
+      return calculatRate(data);
     },
     deConcern(item, index) {
       this.$dialog

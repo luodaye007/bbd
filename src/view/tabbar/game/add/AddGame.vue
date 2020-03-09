@@ -35,6 +35,9 @@
         </van-cell>
         <van-cell title="我希望他的位置是" :value="form.orientation" @click="showAction = true" is-link />
         <van-cell title="评分限定" :value="rate" @click="showRate = true" is-link />
+        <van-cell title="加入审核">
+          <van-switch v-model="form.verify" size="20px" />
+        </van-cell>
         <van-cell title="场地是否收费">
           <van-switch v-model="form.chargeable" size="20px" />
         </van-cell>
@@ -166,7 +169,8 @@ export default {
         lng: 0,
         chargeable: false,
         cost: null,
-        rate: null
+        rate: null,
+        verify: false
       },
       teamInfo: {
         nickname: "",

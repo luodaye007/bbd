@@ -5,7 +5,13 @@
     <van-nav-bar :title="'赛事详情'" />
     <div class="show-header" v-if="game">
       <div class="show-header-left">
-        <van-image round width="1.2rem" height="1.2rem" :src="game.user.avatar" @click="showUser(game.user.username)" />
+        <van-image
+          round
+          width="1.2rem"
+          height="1.2rem"
+          :src="game.user.avatar"
+          @click="showUser(game.user.username)"
+        />
         <div class="show-header-left-inner">
           <span class="nickname">{{game.user.nickname}}</span>
           <div>
@@ -91,7 +97,7 @@
 </template>
 
 <script>
-import { sillyDay, getFlatternDistance } from "@/utils";
+import { sillyDay, getFlatternDistance, calculatRate } from "@/utils";
 import { showGame } from "@/api";
 import { ip } from "@/config";
 import VanNavBar from "@/components/VanNavBar";
@@ -273,6 +279,7 @@ export default {
           res.data.game.lat
         );
         this.game.game_time_ch = sillyDay(this.game.game_time);
+        this.game.user.rate = calculatRate(this.game.user.game_comments);
         this.init(res.data.game.lat, res.data.game.lng);
         this.$toast.clear();
         //this.src = `https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:${res.data.game.lat},${res.data.game.lng};title:超好吃冰激凌;addr:手帕口桥北铁路道口&key=RCDBZ-ALJKJ-HNIFV-KB4ZJ-CJOW6-2XFEX&referer=myapp`;

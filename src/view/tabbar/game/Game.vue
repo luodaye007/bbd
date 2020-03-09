@@ -225,7 +225,7 @@
 
 <script>
 import { getGame } from "@/api";
-import { getFlatternDistance, quickSort } from "@/utils";
+import { getFlatternDistance, quickSort, calculatRate } from "@/utils";
 export default {
   components: {},
   data() {
@@ -333,14 +333,6 @@ export default {
     deep: true
   },
   methods: {
-    calculatRate(data) {
-      //接受一个数组 为用户所有的评论 求和
-      let rate = 1.5;
-      data.forEach(item => {
-        rate += item.rate;
-      });
-      return rate / (data.length + 1);
-    },
     select(value, type) {
       this[type] = value;
     },
@@ -436,7 +428,7 @@ export default {
 
         res.data.rows.forEach(element1 => {
           //计算评分
-          element1.user.rate = this.calculatRate(element1.user.game_comments);
+          element1.user.rate = calculatRate(element1.user.game_comments);
           this.concern.forEach(element2 => {
             if (element1.user.username == element2.concern_id) {
               element1.concernState = true;

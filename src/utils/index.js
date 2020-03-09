@@ -67,3 +67,12 @@ export function quickSort(arr) { //快速排序
     }
     return quickSort(left).concat([pivot], quickSort(right)); //加入基准数
 }
+
+export function calculatRate(data) {
+    //接受一个数组 为用户所有的评论 求和
+    let rate = 1.5;
+    data.forEach(item => {
+        rate += item.rate;
+    });
+    return rate / (data.length + 1);
+}

@@ -76,6 +76,7 @@
 <script>
 import VanNavBar from "@/components/VanNavBar";
 import { getUserInfo } from "@/api";
+import { calculatRate } from "@/utils";
 export default {
   components: {
     "van-nav-bar": VanNavBar
@@ -100,11 +101,7 @@ export default {
       this.getUserInfo();
     },
     calculatRate(data) {
-      let rate = 1.5;
-      data.forEach(item => {
-        rate += item.rate;
-      });
-      return rate / (data.length + 1);
+      return calculatRate(data);
     },
     chat() {
       this.$store.commit("CHANGE_CHAT_LIST_TYPE", {
