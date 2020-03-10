@@ -66,6 +66,8 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ### 聊天列表
 描述：
 		聊天列表页面类似于微信聊天，负责响应式展示聊天列表。每个列表项中展示的内容如下：左侧展示用户头像如有未读新消息头像右上角会提示未读数；中间分为三栏目，上面展示用户昵称、中间展示最新的聊天内容或者类型（字符就展示字符本身，其他的展示类型）、下方展示用户设置的标签；最右边展示的是最新聊天的时间；标签栏中会展示所有的未读信息条数之和。按住列表项左移动可删除。如下图：
+    
+    
     ![Alt text](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%81%8A%E5%A4%A9%E5%88%97%E8%A1%A81.png)
     ![Alt text](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%81%8A%E5%A4%A9%E5%88%97%E8%A1%A82.png)
       
