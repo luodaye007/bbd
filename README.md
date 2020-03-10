@@ -24,15 +24,16 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 # 应用功能展示
 ## 赛事
 ### 赛事列表
+1
 		赛事展示页面中，头部搜索栏可以通过用户昵称搜索到其发布的作品。位于搜索框下面的操作栏目是用于赛事搜索功能区，其中点击筛选之后会弹出关于地区、类型、时长、位置、限定、费用等筛选条件查询赛事。筛选功能区下面就是赛事的栏目区域，点击关注可以添加赛事发布者到自己的关注列表中。点击赛事栏目关注意外的区域即可进入赛事详情页面；点击赛事展示页面右下角添加按钮即可进入赛事发布页面。如下图所示：
-        ![Alt text](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E5%B1%95%E7%A4%BA.png)
-        ![Alt text](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E7%AD%9B%E9%80%89.png)
-				赛事展示                                赛事筛选
+        ![赛事展示](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E5%B1%95%E7%A4%BA.png)
+        ![赛事筛选](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E7%AD%9B%E9%80%89.png)
+				                                
 
 ### 赛事发布
 		赛事发布页面主要用于赛事发布资料的填写。其中时间、时长、赛事类型、赛事地点、赛事人数、赛事位置、评分限定、加入审核、场地是否收费为必填字段；已有信息、备注为非必填字段。如下图所示：
-    ![image](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E5%8F%91%E5%B8%83.png)
-    ![image](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E5%9C%B0%E7%82%B9%E9%80%89%E5%8F%96.png)
+    ![Alt text](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E5%8F%91%E5%B8%83.png)
+    ![Alt text](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E5%9C%B0%E7%82%B9%E9%80%89%E5%8F%96.png)
      赛事发布							     赛事地点选取
 ### 赛事详情
 		赛事详情页面会展示发布者的信息，赛事详情信息，队友信息，赛事地点等；点击发布者头像可查看发布者详细资料，点击沟通图标可与发布者发起聊天。加入按钮位于信封处，点击即可发起加入请求。如下图所示：
