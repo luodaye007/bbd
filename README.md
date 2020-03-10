@@ -22,6 +22,16 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 # 林钜隆-毕设作品-前端页面展示
 
+## 技术介绍
+### UI设计：参考花瓣网摄图网等网站参考
+### 移动端适配：采用淘宝适配方式(rem);
+### UI框架：vant，Muse
+### 前端：vue全家桶，better-scorll 腾讯地图组件和api vue-socket lib-flexile img-cut
+### 后端：egg mysql redis egg-socket
+
+## 项目描述
+一款涉及篮球和及时通讯的app，具体功能截图如下
+
 # 应用功能展示
 ## 赛事
 ### 赛事列表
