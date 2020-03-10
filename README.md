@@ -31,8 +31,8 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 ### 赛事发布
 		赛事发布页面主要用于赛事发布资料的填写。其中时间、时长、赛事类型、赛事地点、赛事人数、赛事位置、评分限定、加入审核、场地是否收费为必填字段；已有信息、备注为非必填字段。如下图所示：
-    ![Alt text](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E5%8F%91%E5%B8%83.png)
-    ![Alt text](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E5%9C%B0%E7%82%B9%E9%80%89%E5%8F%96.png)
+    ![image](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E5%8F%91%E5%B8%83.png)
+    ![image](https://github.com/luodaye007/bbd-client/blob/master/ScreenShots/%E8%B5%9B%E4%BA%8B%E5%9C%B0%E7%82%B9%E9%80%89%E5%8F%96.png)
      赛事发布							     赛事地点选取
 ### 赛事详情
 		赛事详情页面会展示发布者的信息，赛事详情信息，队友信息，赛事地点等；点击发布者头像可查看发布者详细资料，点击沟通图标可与发布者发起聊天。加入按钮位于信封处，点击即可发起加入请求。如下图所示：
