@@ -178,6 +178,9 @@ export default {
       if (!this.$store.state.user.loginStatus) {
         this.$toast("请先登录");
         return;
+      } else if (this.game.game_number == 0) {
+        this.$toast("该比赛需求人数已满");
+        return;
       } else if (this.$store.state.user.userInfo.rate < this.game.rate) {
         this.$toast("您的评分未达到该比赛限定评分");
         return;
