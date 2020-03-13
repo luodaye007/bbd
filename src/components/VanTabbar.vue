@@ -6,14 +6,14 @@
       <van-tabbar-item replace to="/equipment" icon="hot-o">装备</van-tabbar-item>
       <!-- <van-tabbar-item icon="add-square" class="add" @click="add">发布</van-tabbar-item> -->
       <van-tabbar-item replace to="/communicate" icon="chat-o" :info="unread_num">交流</van-tabbar-item>
-      <van-tabbar-item replace to="/mine" icon="manager-o">我的</van-tabbar-item>
+      <van-tabbar-item replace to="/mine" icon="manager-o" :info="newMessage">我的</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["unread_num"],
+  props: ["unread_num", "newMessage"],
   components: {},
   data() {
     return {};
@@ -42,8 +42,5 @@ export default {
   border-bottom: none;
   border-radius: 50%;
   background-color: red;
-}
-.tab/deep/.van-icon-add-square {
-  //font-size: 0.6rem;
 }
 </style>

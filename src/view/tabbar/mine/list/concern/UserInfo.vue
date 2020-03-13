@@ -50,7 +50,39 @@
         </div>
       </div>
     </div>
+    <div class="line"></div>
     <div class="bottom">
+      <div class="title">他的资料</div>
+      <div class="info">
+        <div class="self-info">
+          <div class="half">
+            <span class="static">技术评分：</span>
+            {{userInfo.rate}}
+          </div>
+          <div class="half">
+            <span class="static">信用评分：</span>
+            {{userInfo.credit}}
+          </div>
+        </div>
+        <div class="self-info">
+          <div class="half">
+            <span class="static">身高：</span>
+            {{userInfo.stature}}
+          </div>
+          <div class="half">
+            <span class="static">体重：</span>
+            {{userInfo.weight}}
+          </div>
+        </div>
+        <div>
+          <span class="static">位置：</span>
+          {{userInfo.orientation}}
+        </div>
+        <div>
+          <span class="static">电话：</span>
+          {{userInfo.phone}}
+        </div>
+      </div>
       <div class="title">他的关注</div>
       <div class="item" v-for="(item,index) in userInfo.concerns" :key="index">
         <div class="left">
@@ -173,14 +205,12 @@ export default {
 <style scoped>
 .userInfo {
   margin-top: 46px;
-  background-color: #fbfafa;
+  height: 100vh;
+  background-color: white;
 }
 .top {
   text-align: center;
   padding-top: 0.5rem;
-  border-bottom-left-radius: 0.2rem;
-  border-bottom-right-radius: 0.2rem;
-  background-color: white;
 }
 .nickname {
   font-weight: bold;
@@ -241,7 +271,6 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding-left: 0.1rem;
-  border-bottom: 1px solid #f2f2f2;
 }
 .left {
   display: flex;
@@ -262,5 +291,25 @@ export default {
 }
 .right-bottom span:first-child {
   margin-right: 0.2rem;
+}
+.self-info {
+  display: flex;
+}
+.half {
+  width: 50%;
+}
+.static {
+  color: #ccc;
+}
+.info {
+  padding: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+.info > div {
+  margin-bottom: .2rem;
+}
+.line {
+  background-color: #fbfafa;
+  height: 10px;
 }
 </style>

@@ -6,7 +6,8 @@ import { Toast } from 'vant';
 const state = {
     socketState: false,
     chat_list: JSON.parse(window.localStorage.getItem('chat_list')) || [],
-    comment_list: JSON.parse(window.localStorage.getItem('comment_list')) || []
+    comment_list: JSON.parse(window.localStorage.getItem('comment_list')) || [],//评论或者赛事申请
+    has_apply_game: JSON.parse(window.localStorage.getItem('has_apply_game')) || []//申请过的赛事
 }
 
 // 定义 getters
@@ -60,7 +61,7 @@ const mutations = {
         data.forEach(item => {
             let itemData = JSON.parse(item);
             //取出所有的新消息
-            if (itemData.type === 'comment') {
+            if (itemData.type === 'comment' || itemData.type === 'game_verify') {
                 itemData.unread = true;
                 state.comment_list.unshift(itemData);
             } else {
@@ -105,10 +106,12 @@ const mutations = {
             flag = true;
         }
 
+
         for (var i = 0; i < state.chat_list.length; i++) {
             if (state.chat_list[i].username == data.send_info.username) { //如果已经存在聊天对话框
                 if (!flag) {
                     state.chat_list[i].unread_num++;
+                    state.chat_list = JSON.parse(JSON.stringify(state.chat_list));
                 }
                 state.chat_list[i].chat_list.push(data);
                 return;
@@ -124,10 +127,18 @@ const mutations = {
         obj.unread_num = 1;
         obj.chat_list = [data];
         state.chat_list.unshift(obj);
-
+        state.chat_list = JSON.parse(JSON.stringify(state.chat_list));
     },
+    //评论或者赛事申请
     socket_client_receive_comment(state, data) {
         data.unread = true;
+        if (data.type === 'game_notiy') {//删除申请过的 实现被拒绝还可以继续申请
+            state.has_apply_game.forEach((item, index) => {
+                if (data.game_id === item) {
+                    state.has_apply_game.splice(index, 1);
+                }
+            })
+        }
         state.comment_list.unshift(data);
     },
     socketStateChange(state, bol) {
@@ -153,6 +164,7 @@ const mutations = {
             data.unread_num = 0;
             state.chat_list.unshift(data.userInfo);
         }
+        state.chat_list = JSON.parse(JSON.stringify(state.chat_list));
     },
     chat_change(state) {
         //有时候记录不会同步 需要commit
@@ -163,6 +175,13 @@ const mutations = {
     },
     clear_message_unread(state, index) {
         state.comment_list[index].unread = false;
+    },
+    clear_message_approve(state, index) {
+        state.comment_list[index].approve = true;
+    },
+    change_has_apply_game(state, game_id) {
+        state.has_apply_game.push(game_id);
+        console.log(state.has_apply_game)
     }
 }
 

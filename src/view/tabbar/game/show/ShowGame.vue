@@ -15,7 +15,7 @@
         <div class="show-header-left-inner">
           <span class="nickname">{{game.user.nickname}}</span>
           <div>
-            <van-rate v-model="game.user.rate" allow-half readonly />
+            <van-rate v-model="game.user.rate" allow-half readonly size="18" />
             <span class="credit">{{game.user.credit}}</span>
           </div>
         </div>
@@ -97,7 +97,12 @@
 </template>
 
 <script>
-import { sillyDay, getFlatternDistance, calculatRate } from "@/utils";
+import {
+  sillyDay,
+  getFlatternDistance,
+  calculatRate,
+  sillyDay1
+} from "@/utils";
 import { showGame } from "@/api";
 import { ip } from "@/config";
 import VanNavBar from "@/components/VanNavBar";
@@ -178,13 +183,19 @@ export default {
       if (!this.$store.state.user.loginStatus) {
         this.$toast("请先登录");
         return;
+      } else if (
+        this.game.game_athletes.some(
+          item => item.username == this.userInfo.username
+        )
+      ) {
+        this.$toast("您本是此赛事一员");
       } else if (this.game.game_number == 0) {
         this.$toast("该比赛需求人数已满");
         return;
-      } else if (this.$store.state.user.userInfo.rate < this.game.rate) {
+      } else if (this.userInfo.rate < this.game.rate) {
         this.$toast("您的评分未达到该比赛限定评分");
         return;
-      } else if (!this.$store.state.user.userInfo.orientation) {
+      } else if (!this.userInfo.orientation) {
         this.$dialog
           .confirm({
             title: "提示",
@@ -200,7 +211,7 @@ export default {
           });
       } else {
         const orientationArr = [
-          ...this.$store.state.user.userInfo.orientation.split(" "),
+          ...this.userInfo.orientation.split(" "),
           ...this.game.orientation.split(" ")
         ];
         // 数组去重
@@ -230,21 +241,62 @@ export default {
       let data = {};
       data.game_id = this.game.game_id;
       data.username = this.userInfo.username;
-      this.$store
-        .dispatch("joinGame", data)
-        .then(res => {
-          //console.log(res);
-          if (res.data.code) {
-            this.$toast("加入成功");
-          } else {
-            if (res.data.msg == "SequelizeUniqueConstraintError") {
-              this.$toast("您本是此赛事一员");
+      if (!this.game.verify) {
+        this.$store
+          .dispatch("joinGame", data)
+          .then(res => {
+            //console.log(res);
+            if (res.data.code) {
+              this.$toast("加入成功");
+              this.game.game_athletes.push({
+                username: this.userInfo,
+                user: this.userInfo,
+                game_id: this.game.game_id
+              });
             } else {
-              this.$toast.fail(res.data.msg);
+              if (res.data.msg == "SequelizeUniqueConstraintError") {
+                this.$toast("您本是此赛事一员");
+              } else {
+                this.$toast.fail(res.data.msg);
+              }
             }
-          }
-        })
-        .catch(reason => {});
+          })
+          .catch(reason => {});
+      } else {
+        //开启了加入审核
+        //先去判断有没有申请过这个比赛了
+        if (
+          this.$store.state.socket.has_apply_game.some(
+            item => item === this.game.game_id
+          )
+        ) {
+          this.$dialog
+            .confirm({
+              title: "提示",
+              message: "您已经申请过这场赛事了，请耐心等候审批",
+              confirmButtonText: "去通知",
+              cancelButtonText: "继续等待"
+            })
+            .then(() => {
+              // on confirm
+              this.chat();
+            })
+            .catch(() => {
+              // on cancel
+            });
+        } else {
+          data.receive_id = this.game.username;
+          data.type = "game_verify";
+          data.apply_time = sillyDay1(new Date().getTime());
+          data.apply_id = this.userInfo.username;
+          data.be_apply_id = this.game.username;
+          data.apply_nickname = this.userInfo.nickname;
+          data.apply_avatar = this.userInfo.avatar;
+          this.$socket.emit("verify", data);
+          this.$store.commit("change_has_apply_game", this.game.game_id);
+          this.$toast("申请成功");
+        }
+      }
     },
     chat() {
       this.$store.commit("CHANGE_CHAT_LIST_TYPE", {

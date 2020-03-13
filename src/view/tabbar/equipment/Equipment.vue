@@ -301,7 +301,7 @@ export default {
   font-size: 0.4rem;
 }
 .img-info-tag {
-  font-size: 0.11rem;
+  font-size: 10px;
   color: grey;
 }
 .equipment/deep/.van-divider {

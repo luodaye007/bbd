@@ -5,7 +5,7 @@
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
-    <van-tabbar v-show="$route.meta.VanTabbar" :unread_num="unread_num"></van-tabbar>
+    <van-tabbar v-show="$route.meta.VanTabbar" :unread_num="unread_num" :newMessage="newMessage"></van-tabbar>
   </div>
 </template>
 
@@ -22,6 +22,11 @@ export default {
       return this.$store.getters.unread_num == 0
         ? ""
         : this.$store.getters.unread_num;
+    },
+    newMessage: function() {
+      return this.$store.getters.unread_comment_num == 0
+        ? ""
+        : this.$store.getters.unread_comment_num;
     }
   },
   components: {
@@ -52,7 +57,12 @@ export default {
         JSON.stringify(this.$store.state.socket.comment_list)
       );
 
-      //window.localStorage.removeItem('comment_list')
+      window.localStorage.setItem(
+        "has_apply_game",
+        JSON.stringify(this.$store.state.socket.has_apply_game)
+      );
+
+      window.localStorage.removeItem("has_apply_game");
     });
 
     if (window.localStorage.token) {
