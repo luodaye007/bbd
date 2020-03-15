@@ -186,6 +186,14 @@ const mutations = {
     },
     chat_list_to_top(state, index) {
         state.chat_list.unshift(state.chat_list.splice(index, 1)[0]);
+    },
+    update_chat_list_user(state, arr) {
+        //目前只更新用户的头像，昵称，标签
+        state.chat_list.forEach((item, index) => {
+            item.avatar = arr[index].avatar;
+            item.nickname = arr[index].nickname;
+            item.tag = arr[index].tag;
+        })
     }
 }
 

@@ -64,6 +64,7 @@
 
 <script>
 import { ago } from "@/utils";
+import { baseRequest } from "@/api";
 export default {
   components: {},
   data() {
@@ -83,10 +84,17 @@ export default {
   watch: {},
   methods: {
     onRefresh() {
-      setTimeout(() => {
-        this.$toast("刷新成功");
-        this.isLoading = false;
-      }, 500);
+      let users = [];
+      this.chat_list.forEach(item => {
+        users.push(item.username);
+      });
+      if (users.length > 0) {
+        baseRequest.updateChatListUser(users.join(",")).then(res => {
+          this.$store.commit("update_chat_list_user", res.data.usersInfo);
+          this.$toast("刷新成功");
+          this.isLoading = false;
+        });
+      }
     },
     // clickPosition 表示关闭时点击的位置
     onDelete(item) {

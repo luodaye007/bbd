@@ -49,6 +49,12 @@ export default {
             url: '/user/reset',
             data: Qs.stringify(data),
         })
+    },
+    updateChatListUser: usernames => {//更新聊天列表用户信息
+        return instance({
+            method: 'get',
+            url: '/user/updateChatListUser?username=' + usernames
+        })
     }
 };
 
