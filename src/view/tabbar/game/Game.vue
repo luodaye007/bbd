@@ -241,8 +241,8 @@ export default {
       game_part: "推荐",
       distance: 0,
       keyword: "",
-      lng: 0,
-      lat: 0,
+      lng: this.$store.state.user.location.lng,
+      lat: this.$store.state.user.location.lat,
       districtOption: [
         { text: "全部", value: "全部" },
         { text: "越秀区", value: "越秀区" },
@@ -362,35 +362,8 @@ export default {
       this.searchFocus = false;
     },
     onLoad() {
-      // 异步更新数据
-      if (!this.lng) {
-        var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition(r => {
-          if (r.point) {
-            this.lng = r.longitude;
-            this.lat = r.latitude;
-
-            var point = new BMap.Point(r.longitude, r.latitude); //用当前定位的经纬度查找省市区街道等信息
-            var gc = new BMap.Geocoder();
-            gc.getLocation(point, rs => {
-              var addComp = rs.addressComponents;
-              console.log(rs); //地址信息
-              console.log(rs.address); //地址信息
-              this.$store.commit("LOCATION", {
-                lng: parseFloat(this.lng),
-                lat: parseFloat(this.lat),
-                address: rs.address,
-                district: rs.addressComponents.district
-              });
-              this.loading = true;
-              this.getGame();
-            });
-          }
-        });
-      } else {
-        this.loading = true;
-        this.getGame();
-      }
+      this.loading = true;
+      this.getGame();
     },
     onRefresh() {
       this.list.length = 0;

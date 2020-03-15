@@ -76,3 +76,31 @@ export function calculatRate(data) {
     });
     return rate / (data.length + 1);
 }
+
+export async function getLocation(store, cb) {
+    console.log('开始获取位置信息');
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(r => {
+        if (r.point) {
+            var lng = r.longitude;
+            var lat = r.latitude;
+
+            var point = new BMap.Point(r.longitude, r.latitude); //用当前定位的经纬度查找省市区街道等信息
+            var gc = new BMap.Geocoder();
+            gc.getLocation(point, rs => {
+                var addComp = rs.addressComponents;
+                //console.log(rs); //地址信息
+                console.log(rs.address); //地址信息
+                store.commit("LOCATION", {
+                    lng: parseFloat(lng),
+                    lat: parseFloat(lat),
+                    address: rs.address,
+                    district: rs.addressComponents.district
+                });
+                cb(true);
+            });
+        } else {
+            cb(false);
+        }
+    });
+}

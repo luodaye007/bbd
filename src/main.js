@@ -19,6 +19,7 @@ import 'lib-flexible/flexible.js'
 
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
+import { getLocation } from './utils';
 
 //import BaiduMap from 'vue-baidu-map'
 
@@ -38,11 +39,28 @@ Vue.use(Dialog);
 Vue.use(Popup);
 Vue.use(Notify);
 
+getLocation(store, (hasLocation) => {
+    if (hasLocation) {//启动应用
+        new Vue({
+            el: '#app',
+            router,
+            store,
+            components: { App },
+            template: '<App/>',
+            created: function () {
+                console.log('应用启动成功！');
+            }
+        })
+    } else {
+        Dialog.alert({
+            title: '提示',
+            message: '位置获取失败',
+            confirmButtonText: '刷新'
+        }).then(() => {
+            // on close
+            router.go(0);
+        });
+    }
+});
+
 /* eslint-disable no-new */
-new Vue({
-    el: '#app',
-    router,
-    store,
-    components: { App },
-    template: '<App/>'
-})

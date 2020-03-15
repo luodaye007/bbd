@@ -448,7 +448,7 @@ export default {
   font-size: 0.5rem;
 }
 .credit {
-  font-size: 0.4rem;
+  font-size: 0.375rem;
   color: #00df77;
   position: relative;
   top: -0.05rem;
