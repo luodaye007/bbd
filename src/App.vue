@@ -102,7 +102,4 @@ export default {
 .van-hairline--bottom::after {
   border: none;
 }
-body{
-  overflow: hidden;
-}
 </style>

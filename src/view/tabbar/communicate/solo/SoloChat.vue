@@ -536,6 +536,7 @@ export default {
         //this.chatRecord = element.chat_list;
       }
     });
+    document.getElementsByTagName("body")[0].style.overflow = "hidden";
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
@@ -546,6 +547,10 @@ export default {
       }
     });
     this.setScrollHeight();
+  },
+  destroyed() {
+    //高度样式有问题
+    document.getElementsByTagName("body")[0].style.overflow = "auto";
   }
 };
 </script>
