@@ -33,7 +33,7 @@
 
 <script>
 import VanNavBar from "@/components/VanNavBar";
-import { showEquipmentByUsers } from "@/api";
+import { equipmentRequest } from "@/api";
 export default {
   components: {
     "van-nav-bar": VanNavBar
@@ -57,9 +57,11 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    showEquipmentByUsers(this.$store.state.user.userInfo.username).then(res => {
-      this.equipment = res.data.equipment;
-    });
+    equipmentRequest
+      .showEquipmentByUsers(this.$store.state.user.userInfo.username)
+      .then(res => {
+        this.equipment = res.data.equipment;
+      });
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {}

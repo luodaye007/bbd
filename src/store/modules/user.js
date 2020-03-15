@@ -4,11 +4,12 @@ import VueSocketIO from 'vue-socket.io'
 import Vue from 'vue'
 import { ip } from '@/config';
 import store from '@/store/index';
-import { instance, login, register, getUserInfo, updateUserInfo, addConcern, delConcern, joinGame } from '@/api/index.js';
+import { instance, baseRequest, concernRequest, gameRequest } from '@/api/index.js';
+
 const state = {
     token: '',
     loginStatus: false,
-    userInfo: null,
+    userInfo: {},
     concern: [],
     location: null
 }
@@ -26,7 +27,7 @@ const mutations = {
         state.token = token;
     },
     [types.USERINFO](state, userInfo) {
-        state.userInfo = userInfo;
+        state.userInfo = Object.assign(state.userInfo, userInfo);
     },
     [types.CONCERN](state, concern) {
         state.concern = concern;
@@ -48,7 +49,7 @@ const mutations = {
 const actions = {
     register({ commit }, info) {
         return new Promise((resolve, reject) => {
-            register(info).then(res => {
+            baseRequest.register(info).then(res => {
                 if (res.data.code) {
                     commit(types.TOKEN, res.data.token);
                     commit(types.LOGINSTATUS, true);
@@ -63,7 +64,7 @@ const actions = {
     },
     doLogin({ commit }, info) {
         return new Promise((resolve, reject) => {
-            login(info).then(res => {
+            baseRequest.login(info).then(res => {
                 if (res.status === 200) {
                     if (res.data.code) {
                         commit(types.TOKEN, res.data.token);
@@ -90,9 +91,9 @@ const actions = {
             resolve()
         })
     },
-    getUserInfo({ commit }, username) { //获取用户信息
+    getUserInfo({ commit }, username) { //获取用户信息 连接socket
         return new Promise((resolve, reject) => {
-            getUserInfo(username).then(res => {
+            baseRequest.getUserInfo(username).then(res => {
                 if (res.status === 200) {
                     commit(types.LOGINSTATUS, true);
                     commit('USERINFO', res.data.userInfo);
@@ -119,7 +120,7 @@ const actions = {
     },
     updateUserInfo({ commit }, userInfo) { //更新用户信息
         return new Promise((resolve, reject) => {
-            updateUserInfo(userInfo).then(res => {
+            baseRequest.updateUserInfo(userInfo).then(res => {
                 if (res.status === 201) {
                     commit('USERINFO', res.data.userInfo);
                 }
@@ -131,7 +132,7 @@ const actions = {
     },
     addConcern({ commit }, data) { //新增关注
         return new Promise((resolve, reject) => {
-            addConcern(data).then(res => {
+            concernRequest.addConcern(data).then(res => {
                 if (res.status === 201) {
                     state.concern.push(data);
                     commit('CONCERN', state.concern);
@@ -145,7 +146,7 @@ const actions = {
     },
     delConcern({ commit }, data) { //取消关注
         return new Promise((resolve, reject) => {
-            delConcern(data).then(res => {
+            concernRequest.delConcern(data).then(res => {
                 if (res.status === 204) {
                     //commit('USERINFO', res.data.userInfo);
                     commit('CONCERN', state.concern.filter(item => item.concern_id !== data.concern_id));
@@ -159,7 +160,7 @@ const actions = {
     },
     joinGame({ commit }, data) {
         return new Promise((resolve, reject) => {
-            joinGame(data).then(res => {
+            gameRequest.joinGame(data).then(res => {
                 if (res.status === 201) {
                     //commit('USERINFO', res.data.userInfo);
                     //commit('CONCERN', state.concern.filter(item => item.concern_id == data.concern_id));

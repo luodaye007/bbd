@@ -25,6 +25,7 @@
         label="价格"
         left-icon="balance-o"
         onkeyup="this.value=/^[0-9]*\.?[0-9]{0,2}$/.test(this.value) ? this.value : this.value.substring(0,this.value.length-1)"
+        maxlength="9"
       />
     </van-cell-group>
 
@@ -49,7 +50,7 @@
 
 <script>
 import VanNavBar from "@/components/VanNavBar";
-import { addEquipment } from "@/api";
+import { equipmentRequest } from "@/api";
 export default {
   components: {
     "van-nav-bar": VanNavBar
@@ -118,7 +119,7 @@ export default {
         duration: 0
       });
 
-      addEquipment(formData)
+      equipmentRequest.addEquipment(formData)
         .then(res => {
           console.log(res);
           if (res.status == 201) {

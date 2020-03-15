@@ -63,7 +63,7 @@
 
 <script>
 import VanNavBar from "@/components/VanNavBar";
-import { showGame, createComment } from "@/api";
+import { commentRequest, gameRequest } from "@/api";
 import { sillyDay1 } from "@/utils";
 export default {
   components: {
@@ -124,7 +124,7 @@ export default {
         this.member.push(this.captain);
       }
 
-      createComment(this.member)
+      commentRequest.createComment(this.member)
         .then(res => {
           toast.clear();
           this.$toast("发表成功");
@@ -149,7 +149,8 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    showGame(this.$route.query.game_id)
+    gameRequest
+      .showGame(this.$route.query.game_id)
       .then(res => {
         console.log(res);
         this.gameData = res.data.game;

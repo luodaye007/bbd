@@ -107,7 +107,7 @@
 
 <script>
 import VanNavBar from "@/components/VanNavBar";
-import { getUserInfo } from "@/api";
+import { baseRequest } from "@/api";
 import { calculatRate } from "@/utils";
 export default {
   components: {
@@ -190,7 +190,7 @@ export default {
       }
     },
     getUserInfo() {
-      getUserInfo(this.$route.query.username).then(res => {
+      baseRequest.getUserInfo(this.$route.query.username).then(res => {
         console.log(res);
         this.userInfo = res.data.userInfo;
       });
@@ -306,7 +306,7 @@ export default {
   margin-bottom: 0.2rem;
 }
 .info > div {
-  margin-bottom: .2rem;
+  margin-bottom: 0.2rem;
 }
 .line {
   background-color: #fbfafa;

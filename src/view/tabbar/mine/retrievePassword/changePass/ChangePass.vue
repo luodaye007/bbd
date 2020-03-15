@@ -29,7 +29,7 @@
 
 <script>
 import VanNavBar from "@/components/VanNavBar";
-import { reset } from "@/api";
+import { baseRequest } from "@/api";
 export default {
   components: {
     "van-nav-bar": VanNavBar
@@ -63,10 +63,11 @@ export default {
         return;
       }
 
-      reset({
-        username: this.$route.query.username,
-        password: this.password
-      })
+      baseRequest
+        .reset({
+          username: this.$route.query.username,
+          password: this.password
+        })
         .then(res => {
           if (res.status == 201) {
             this.$toast({

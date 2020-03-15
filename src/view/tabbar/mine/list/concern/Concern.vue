@@ -30,7 +30,7 @@
 
 <script>
 import VanNavBar from "@/components/VanNavBar";
-import { showConcern } from "@/api";
+import { concernRequest } from "@/api";
 import { calculatRate } from "@/utils";
 export default {
   components: {
@@ -88,7 +88,8 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    showConcern(this.$store.state.user.userInfo.username)
+    concernRequest
+      .showConcern(this.$store.state.user.userInfo.username)
       .then(res => {
         //console.log(res);
         this.concern = res.data.concern;

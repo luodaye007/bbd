@@ -244,7 +244,7 @@ import TencentMapChooseLocation from "@/components/TencentMapChooseLocation";
 import VanNavBar from "@/components/VanNavBar";
 import Scroll from "@/components/Scroll";
 import { ip } from "@/config";
-import { showEquipmentByUsers, getGames } from "@/api";
+import { equipmentRequest, gameRequest } from "@/api";
 import { sillyDay1 } from "@/utils";
 export default {
   components: {
@@ -286,25 +286,20 @@ export default {
             data.type == "location" &&
             data.send_info.username != this.selfUserInfo.username
           ) {
+            //先取到页面元素
             this.$nextTick(() => {
-              this.$refs.wrapper.refresh();
-              this.$refs.wrapper.scrollToEnd();
-              this.$nextTick(() => {
-                this.init(
-                  data.id,
-                  data.location.latlng.lat,
-                  data.location.latlng.lng
-                );
-              });
+              this.init(
+                data.id,
+                data.location.latlng.lat,
+                data.location.latlng.lng
+              );
             });
           }
-          this.$nextTick(() => {
-            setTimeout(() => {
-              this.$refs.wrapper.refresh();
-              this.$refs.wrapper.scrollToEnd();
-            }, 20);
-          });
-          this.$forceUpdate();
+          setTimeout(() => {
+            this.$refs.wrapper.refresh();
+            this.$refs.wrapper.scrollToEnd();
+          }, 20);
+          //this.$forceUpdate();
         }
       },
       deep: true
@@ -336,16 +331,18 @@ export default {
     equipmentShow() {
       this.showEquipment = true;
       if (!this.hasGetEquipment) {
-        showEquipmentByUsers(this.selfUserInfo.username).then(res => {
-          this.hasGetEquipment = true;
-          this.equipment = res.data.equipment;
-        });
+        equipmentRequest
+          .showEquipmentByUsers(this.selfUserInfo.username)
+          .then(res => {
+            this.hasGetEquipment = true;
+            this.equipment = res.data.equipment;
+          });
       }
     },
     gameShow() {
       this.showGame = true;
       if (!this.hasGetGame) {
-        getGames(this.selfUserInfo.username).then(res => {
+        gameRequest.getGames(this.selfUserInfo.username).then(res => {
           this.hasGetGame = true;
           this.game = res.data.games;
         });
@@ -460,12 +457,10 @@ export default {
       this.chat_item.chat_list.push(data);
 
       this.showmap = false;
+      this.$refs.wrapper.refresh();
+      this.$refs.wrapper.scrollToEnd();
       this.$nextTick(() => {
-        this.$refs.wrapper.refresh();
-        this.$refs.wrapper.scrollToEnd();
-        this.$nextTick(() => {
-          this.init(id, location.latlng.lat, location.latlng.lng);
-        });
+        this.init(id, location.latlng.lat, location.latlng.lng);
       });
     },
     toNavigation(item) {
@@ -536,6 +531,8 @@ export default {
       if (element.username == username) {
         this.chat_item = element;
         this.$store.commit("clear_unread_num", index);
+        //置顶
+        this.$store.commit("chat_list_to_top", index);
         //this.chatRecord = element.chat_list;
       }
     });

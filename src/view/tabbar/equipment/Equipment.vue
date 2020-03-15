@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { getEquipment } from "@/api";
+import { equipmentRequest } from "@/api";
 import { ago } from "@/utils";
 import vueWaterfallEasy from "vue-waterfall-easy";
 export default {
@@ -114,12 +114,13 @@ export default {
       this.$router.push({ name: "AddEquipment" });
     },
     getEquipment() {
-      getEquipment(
-        this.part == "全城" ? this.pageAll : this.pagePart,
-        this.part == "全城"
-          ? this.part
-          : this.$store.state.user.location.district
-      )
+      equipmentRequest
+        .getEquipment(
+          this.part == "全城" ? this.pageAll : this.pagePart,
+          this.part == "全城"
+            ? this.part
+            : this.$store.state.user.location.district
+        )
         .then(res => {
           console.log(res);
 

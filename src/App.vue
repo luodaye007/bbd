@@ -62,7 +62,7 @@ export default {
         JSON.stringify(this.$store.state.socket.has_apply_game)
       );
 
-      window.localStorage.removeItem("has_apply_game");
+      window.localStorage.removeItem("chat_list");
     });
 
     if (window.localStorage.token) {

@@ -36,7 +36,7 @@
 
 <script>
 import VanNavBar from "@/components/VanNavBar";
-import { showEquipment } from "@/api";
+import { equipmentRequest } from "@/api";
 import { ago } from "@/utils";
 export default {
   components: { "van-nav-bar": VanNavBar },
@@ -64,7 +64,7 @@ export default {
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    showEquipment(this.$route.query.equipment_id)
+    equipmentRequest.showEquipment(this.$route.query.equipment_id)
       .then(res => {
         this.equipment = res.data.equipment;
       })

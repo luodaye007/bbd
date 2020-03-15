@@ -24,7 +24,7 @@
 
 <script>
 import VanNavBar from "@/components/VanNavBar";
-import { showComment } from "@/api";
+import { commentRequest } from "@/api";
 export default {
   components: {
     "van-nav-bar": VanNavBar
@@ -39,7 +39,7 @@ export default {
   methods: {},
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    showComment(this.$store.state.user.userInfo.username)
+    commentRequest.showComment(this.$store.state.user.userInfo.username)
       .then(res => {
         this.comments = res.data.comments;
         if (this.$route.query.game_id) {

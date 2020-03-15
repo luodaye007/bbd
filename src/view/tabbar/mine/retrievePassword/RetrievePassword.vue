@@ -31,7 +31,7 @@
 <script>
 import VanNavBar from "@/components/VanNavBar";
 import { isPoneAvailable } from "@/utils/index";
-import { checkReset } from "@/api";
+import { baseRequest } from "@/api";
 export default {
   components: {
     "van-nav-bar": VanNavBar
@@ -65,16 +65,18 @@ export default {
         return;
       }
 
-      checkReset({ username: this.username, phone: this.phone }).then(res => {
-        if (res.data.msg == "ok") {
-          this.$router.push({
-            name: "ChangePass",
-            query: { username: this.username }
-          });
-        } else {
-          this.$toast(res.data.msg);
-        }
-      });
+      baseRequest
+        .checkReset({ username: this.username, phone: this.phone })
+        .then(res => {
+          if (res.data.msg == "ok") {
+            this.$router.push({
+              name: "ChangePass",
+              query: { username: this.username }
+            });
+          } else {
+            this.$toast(res.data.msg);
+          }
+        });
       // this.$router.push({ name: "ChangePass" });
     }
   },

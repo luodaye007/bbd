@@ -113,7 +113,7 @@
 
 <script>
 import VanNavBar from "@/components/VanNavBar";
-import { getUserGame, showGame, deleteGame, exitGame } from "@/api";
+import { gameRequest } from "@/api";
 import { sillyDay } from "@/utils";
 export default {
   components: {
@@ -143,7 +143,7 @@ export default {
       if (game.username == this.$store.state.user.userInfo.username) {
         //为赛事队长
         //如果存在队员 则无法结束比赛
-        showGame(game.game_id).then(res => {
+        gameRequest.showGame(game.game_id).then(res => {
           if (
             res.data.game.game_athletes.length <= 1 &&
             res.data.game.game_athletes[0].username ==
@@ -161,7 +161,8 @@ export default {
                   forbidClick: true,
                   message: "退出中"
                 });
-                deleteGame(game.game_id)
+                gameRequest
+                  .deleteGame(game.game_id)
                   .then(res => {
                     if (res.status == 204) {
                       toast.clear();
@@ -199,16 +200,15 @@ export default {
               forbidClick: true,
               message: "退出中"
             });
-            exitGame(
-              game.game_id,
-              this.$store.state.user.userInfo.username
-            ).then(res => {
-              if (res.status == 204) {
-                toast.clear();
-                this.games.splice(index, 1);
-                this.$toast("赛事成功删除并退出");
-              }
-            });
+            gameRequest
+              .exitGame(game.game_id, this.$store.state.user.userInfo.username)
+              .then(res => {
+                if (res.status == 204) {
+                  toast.clear();
+                  this.games.splice(index, 1);
+                  this.$toast("赛事成功删除并退出");
+                }
+              });
           })
           .catch(() => {
             // on cancel
@@ -220,8 +220,9 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    getUserGame(this.$store.state.user.userInfo.username).then(res => {
+    gameRequest.getUserGame(this.$store.state.user.userInfo.username).then(res => {
       let data = res.data.games;
+      console.log(data)
       for (var i = 0; i < data.length; i++) {
         data[i].isComment = false;
         for (var j = 0; j < data[i].game_comments.length; j++) {

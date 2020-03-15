@@ -11,7 +11,13 @@
       <img-cut @callback="callback" :width="130" :height="130"></img-cut>
 
       <van-cell-group :border="false">
-        <van-field v-model="userInfo.nickname" label="昵称" placeholder="请输入昵称" size="large" />
+        <van-field
+          v-model="userInfo.nickname"
+          label="昵称"
+          placeholder="请输入昵称"
+          size="large"
+          maxlength="10"
+        />
         <van-cell
           class="showAction"
           title="位置"
@@ -26,6 +32,7 @@
           placeholder="请输入身高"
           size="large"
           type="number"
+          maxlength="3"
         />
         <van-field
           v-model="userInfo.weight"
@@ -33,6 +40,7 @@
           placeholder="请输入体重"
           size="large"
           type="number"
+          maxlength="3"
         />
         <van-cell
           class="showAction"
@@ -49,6 +57,7 @@
           placeholder="请输入座右铭"
           rows="1"
           autosize
+          maxlength="200"
         />
 
         <van-button
@@ -86,7 +95,7 @@
 import VanNavBar from "@/components/VanNavBar";
 import VanActionSheet from "@/components/VanActionSheet";
 import { imgCut } from "vue-imgcut";
-import { uploadAvatar } from "@/api";
+import { baseRequest } from "@/api";
 export default {
   components: {
     "van-nav-bar": VanNavBar,
@@ -168,7 +177,8 @@ export default {
       });
       var formData = new FormData();
       formData.append("avatar", this.base64toFile(img));
-      uploadAvatar(formData)
+      baseRequest
+        .uploadAvatar(formData)
         .then(res => {
           this.userInfo.avatar = res.data.avatar;
           this.$toast.clear();

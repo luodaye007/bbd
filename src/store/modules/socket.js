@@ -111,9 +111,11 @@ const mutations = {
             if (state.chat_list[i].username == data.send_info.username) { //如果已经存在聊天对话框
                 if (!flag) {
                     state.chat_list[i].unread_num++;
-                    state.chat_list = JSON.parse(JSON.stringify(state.chat_list));
+                    //state.chat_list = JSON.parse(JSON.stringify(state.chat_list));
                 }
                 state.chat_list[i].chat_list.push(data);
+                //置顶
+                state.chat_list.unshift(state.chat_list.splice(i, 1)[0]);
                 return;
             }
         }
@@ -181,7 +183,9 @@ const mutations = {
     },
     change_has_apply_game(state, game_id) {
         state.has_apply_game.push(game_id);
-        console.log(state.has_apply_game)
+    },
+    chat_list_to_top(state, index) {
+        state.chat_list.unshift(state.chat_list.splice(index, 1)[0]);
     }
 }
 

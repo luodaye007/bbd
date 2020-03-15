@@ -103,7 +103,7 @@ import {
   calculatRate,
   sillyDay1
 } from "@/utils";
-import { showGame } from "@/api";
+import { gameRequest } from "@/api";
 import { ip } from "@/config";
 import VanNavBar from "@/components/VanNavBar";
 export default {
@@ -294,7 +294,7 @@ export default {
           data.apply_avatar = this.userInfo.avatar;
           this.$socket.emit("verify", data);
           this.$store.commit("change_has_apply_game", this.game.game_id);
-          this.$toast("申请成功");
+          this.$toast("申请成功，请耐心等候审批");
         }
       }
     },
@@ -323,7 +323,7 @@ export default {
       message: "加载中...",
       duration: 0
     });
-    showGame(game_id)
+    gameRequest.showGame(game_id)
       .then(res => {
         console.log(res);
         this.game = res.data.game;

@@ -224,7 +224,7 @@
 </template>
 
 <script>
-import { getGame } from "@/api";
+import { gameRequest } from "@/api";
 import { getFlatternDistance, quickSort, calculatRate } from "@/utils";
 export default {
   components: {},
@@ -378,7 +378,7 @@ export default {
         duration: 0
       });
 
-      getGame(
+      gameRequest.getGame(
         this.page,
         this.district,
         this.game_type,

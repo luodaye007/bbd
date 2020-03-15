@@ -97,9 +97,11 @@ export async function getLocation(store, cb) {
                     address: rs.address,
                     district: rs.addressComponents.district
                 });
+                console.log('获取位置信息成功，开始启动应用----');
                 cb(true);
             });
         } else {
+            console.error('位置获取失败');
             cb(false);
         }
     });

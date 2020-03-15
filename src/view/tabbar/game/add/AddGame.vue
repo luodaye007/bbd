@@ -49,7 +49,7 @@
           size="large"
           type="number"
         />
-        <van-cell title="已有信息">
+        <!-- <van-cell title="已有信息">
           <van-switch v-model="has_message" size="20px" />
         </van-cell>
         <van-button
@@ -73,7 +73,7 @@
               <van-icon name="delete" @click="deleteItem(index)" />
             </td>
           </tr>
-        </table>
+        </table>-->
         <van-cell title="备注">
           <van-field
             v-model="form.remarks"
@@ -137,7 +137,7 @@ import VanNavBar from "@/components/VanNavBar";
 import VanActionSheet from "@/components/VanActionSheet";
 import VDistpicker from "v-distpicker";
 import TencentMapChooseLocation from "@/components/TencentMapChooseLocation";
-import { addGame } from "@/api";
+import { gameRequest } from "@/api";
 export default {
   components: {
     "van-nav-bar": VanNavBar,
@@ -318,7 +318,8 @@ export default {
         this.form.cost = 0;
       }
 
-      addGame(this.form)
+      gameRequest
+        .addGame(this.form)
         .then(res => {
           console.log(res);
           if (res.status == 201) {
