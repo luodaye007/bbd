@@ -378,58 +378,60 @@ export default {
         duration: 0
       });
 
-      gameRequest.getGame(
-        this.page,
-        this.district,
-        this.game_type,
-        this.duration,
-        this.game_part,
-        this.orientation,
-        this.rate,
-        this.chargeable,
-        this.keyword
-      ).then(res => {
-        console.log(res);
-        // 加载状态结束
-        this.$toast.clear();
-        this.loading = false;
-        this.count = res.data.count;
-        if (this.isLoading) {
-          this.isLoading = false;
-        }
-        this.page++;
+      gameRequest
+        .getGame(
+          this.page,
+          this.district,
+          this.game_type,
+          this.duration,
+          this.game_part,
+          this.orientation,
+          this.rate,
+          this.chargeable,
+          this.keyword
+        )
+        .then(res => {
+          console.log(res);
+          // 加载状态结束
+          this.$toast.clear();
+          this.loading = false;
+          this.count = res.data.count;
+          if (this.isLoading) {
+            this.isLoading = false;
+          }
+          this.page++;
 
-        res.data.rows.forEach(element1 => {
-          //计算评分
-          element1.user.rate = calculatRate(element1.user.game_comments);
-          this.concern.forEach(element2 => {
-            if (element1.user.username == element2.concern_id) {
-              element1.concernState = true;
-            }
+          res.data.rows.forEach(element1 => {
+            //计算评分
+            element1.user.rate = calculatRate(element1.user.game_comments);
+            this.concern.forEach(element2 => {
+              if (element1.user.username == element2.concern_id) {
+                element1.concernState = true;
+              }
+            });
           });
+
+          //计算距离
+          if (this.game_part == "推荐") {
+            res.data.rows.forEach(item => {
+              item.distance = getFlatternDistance(
+                this.lng,
+                this.lat,
+                item.lng,
+                item.lat
+              );
+            });
+          }
+
+          this.list = this.list.concat(res.data.rows);
+
+          //排序
+          if (this.game_part == "推荐") {
+            this.list = quickSort(this.list);
+          }
+
+          this.finished = this.list.length == this.count ? true : false;
         });
-
-        //计算距离
-        if (this.game_part == "推荐") {
-          res.data.rows.forEach(item => {
-            item.distance = getFlatternDistance(
-              this.lng,
-              this.lat,
-              item.lng,
-              item.lat
-            );
-          });
-        }
-
-        this.list = this.list.concat(res.data.rows);
-
-        //排序
-        if (this.game_part == "推荐") {
-          this.list = quickSort(this.list);
-        }
-
-        this.finished = this.list.length == this.count ? true : false;
-      });
     },
     toDetail(game_id) {
       this.$router.push({ name: "ShowGame", query: { game_id: game_id } });

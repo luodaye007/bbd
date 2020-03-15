@@ -551,16 +551,16 @@ export default {
 </script>
 <style scoped lang="less">
 .solo-chat {
-  padding-top: 46px;
-  height: 100vh;
+  margin-top: 46px;
+  height: calc(100vh - 46px);
   overflow: hidden;
 }
 .wrapper {
   overflow: hidden;
 }
 // .wrapper {
-//   transition: all 0.2s;
-//   -webkit-transition: all 0.2s; /* Safari */
+//   transition: all 0.3s;
+//   -webkit-transition: all 0.3s; /* Safari */
 // }
 .cu-chat {
   display: flex;

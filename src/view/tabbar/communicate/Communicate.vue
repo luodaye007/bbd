@@ -140,28 +140,29 @@ export default {
 };
 </script>
 <style scoped lang="less">
-// .van-pull-refresh {
-//   height: 100vh;
-// }
+.van-pull-refresh {
+  //background-color: red;
+  height: 100%;
+}
+.communicate/deep/.van-pull-refresh__track {
+  height: 100%;
+}
+.chat {
+  flex: 1;
+}
 .communicate {
-  margin-bottom: 50px;
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: column;
 }
 .van-search__content {
   border-radius: 5px;
   background-color: rgb(238, 238, 238);
 }
 .line {
-  height: 12px;
   background-color: rgb(242, 242, 242);
   border-top: 1px solid rgb(230, 230, 230);
 }
-/* .van-pull-refresh {
-  height: calc(100vh - 50px);
-} */
-/* .van-pull-refresh {
-  width: 100%;
-  height: 100vh;
-} */
 .chat-item {
   margin-left: 10px;
   padding: 10px;

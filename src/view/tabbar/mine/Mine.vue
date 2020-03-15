@@ -151,7 +151,7 @@ export default {
 <style scoped lang='less'>
 @text-color: #c7c7c7;
 .mine {
-  height: 100%;
+  height: calc(100vh - 50px);
 }
 .van-pull-refresh {
   width: 100%;
