@@ -69,7 +69,19 @@
             class="cu-avatar radius"
             :style="{backgroundImage: 'url(' + selfUserInfo.avatar + ')'}"
           ></div>
-          <div class="date">{{sillyDay(item.time)}}</div>
+          <div class="date" v-if="index==0">{{item.time | moment("calendar")}}</div>
+          <template v-else>
+            <div
+              class="date"
+              v-if="chat_item.chat_list[index].time>chat_item.chat_list[index-1].time+1000*60*5"
+            >{{item.time | moment("calendar")}}</div>
+          </template>
+          <!-- <template v-else>
+            <div
+              class="date"
+              v-if="index==chat_item.chat_list.length-1"
+            >{{item.time | moment("calendar")}}</div>
+          </template>-->
         </div>
         <div class="cu-item" v-else>
           <div class="cu-avatar radius" :style="{backgroundImage: 'url(' + chat_item.avatar + ')'}"></div>
@@ -441,7 +453,7 @@ export default {
         },
         receive_id: this.chat_item.username,
         msg: this.inputValue,
-        time: new Date(),
+        time: new Date().getTime(),
         type: "text"
       };
 

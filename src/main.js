@@ -10,6 +10,8 @@ import { Popup } from 'vant';
 import { Notify } from 'vant';
 import store from '@/store/index';
 import VueJsonp from 'vue-jsonp';
+import moment from "moment";
+import 'moment/locale/zh-cn'
 
 import 'vant/lib/index.css';
 import '@/assets/iconfont/iconfont.css';
@@ -38,6 +40,14 @@ Vue.use(Toast);
 Vue.use(Dialog);
 Vue.use(Popup);
 Vue.use(Notify);
+
+Vue.use(require('vue-moment'), {
+    moment
+})
+
+// moment.locale();
+
+// console.log(moment().subtract(1, 'days').calendar())
 
 getLocation(store, (hasLocation) => {
     if (hasLocation) {//启动应用
