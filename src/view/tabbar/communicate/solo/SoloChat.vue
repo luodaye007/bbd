@@ -268,7 +268,9 @@ export default {
       hasGetEquipment: false,
       hasGetGame: false,
       selectEquipmentIndex: -1,
-      selectGameIndex: -1
+      selectGameIndex: -1,
+      page: 0,
+      hasPulldown: false
     };
   },
   computed: {
@@ -295,10 +297,13 @@ export default {
               );
             });
           }
-          setTimeout(() => {
-            this.$refs.wrapper.refresh();
-            this.$refs.wrapper.scrollToEnd();
-          }, 20);
+          //下拉加载更多不跳到最后
+          if (!this.hasPulldown) {
+            setTimeout(() => {
+              this.$refs.wrapper.refresh();
+              this.$refs.wrapper.scrollToEnd();
+            }, 20);
+          }
           //this.$forceUpdate();
         }
       },
@@ -373,7 +378,14 @@ export default {
     },
     handlePulldown() {
       //this.data.unshift(1);
-      console.log("下拉刷新");
+      //console.log("下拉刷新");
+      this.hasPulldown = true;
+      setTimeout(() => {
+        this.getMoreRecord();
+        this.$nextTick(() => {
+          this.hasPulldown = false;
+        });
+      }, 200);
     },
     toggleUtil() {
       this.showUtil ? (this.showUtil = false) : (this.showUtil = true);
@@ -405,6 +417,7 @@ export default {
     send(data, type) {
       this.$socket.emit("chat", data);
       this.chat_item.chat_list.push(data);
+      this.chat_item_copy.chat_list.push(data);
       if (type == "text") {
         this.inputValue = "";
       } else if (type == "equipment") {
@@ -455,6 +468,7 @@ export default {
       this.$socket.emit("chat", data);
 
       this.chat_item.chat_list.push(data);
+      this.chat_item_copy.chat_list.push(data);
 
       this.showmap = false;
       this.$refs.wrapper.refresh();
@@ -522,6 +536,34 @@ export default {
       if (isiOS) {
         window.scrollTo(0, 0);
       }
+    },
+
+    getMoreRecord() {
+      let allLength = this.chat_item_copy.chat_list.length;
+      this.page++;
+      if (allLength === this.chat_item.chat_list.length) {
+        //关闭下加载更多
+        this.pulldown = false;
+        this.$toast("无更多");
+        return;
+      }
+      if (allLength >= this.page * 10) {
+        if (this.page === 1) {
+          this.chat_item.chat_list = this.chat_item_copy.chat_list
+            .slice(-this.page * 10)
+            .concat(this.chat_item.chat_list);
+        } else {
+          let endIndex = this.page - 1;
+          this.chat_item.chat_list = this.chat_item_copy.chat_list
+            .slice(-this.page * 10, -endIndex * 10)
+            .concat(this.chat_item.chat_list);
+        }
+      } else {
+        let endIndex = this.page - 1;
+        this.chat_item.chat_list = this.chat_item_copy.chat_list
+          .slice(0, -endIndex * 10)
+          .concat(this.chat_item.chat_list);
+      }
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -529,7 +571,12 @@ export default {
     let username = this.$route.query.username;
     this.$store.state.socket.chat_list.forEach((element, index) => {
       if (element.username == username) {
-        this.chat_item = element;
+        //保存原本的信息 用于同步更新
+        this.chat_item_copy = element;
+        this.chat_item = Object.assign({}, element);
+        //先清空 然后逐渐加
+        this.chat_item.chat_list = [];
+        this.getMoreRecord();
         this.$store.commit("clear_unread_num", index);
         //置顶
         this.$store.commit("chat_list_to_top", index);
