@@ -291,13 +291,14 @@ export default {
   },
   watch: {
     "chat_item.chat_list": {
-      handler: function(val) {
-        if (val.length != 0) {
-          let data = val[val.length - 1];
+      handler: function(newVal, oldVal) {
+        //console.log(val, old);
+        //这里只负责监听到用户新发来的地址初始化 因为oldVal初始化数据的时候为未定义
+        if (newVal.length != 0 && oldVal) {
+          let data = newVal[newVal.length - 1];
           if (
             //如果接受的类型是地址 初始化
-            data.type == "location" &&
-            data.send_info.username != this.selfUserInfo.username
+            data.type == "location"
           ) {
             //先取到页面元素
             this.$nextTick(() => {
@@ -308,13 +309,27 @@ export default {
               );
             });
           }
-          //下拉加载更多不跳到最后
-          if (!this.hasPulldown) {
-            setTimeout(() => {
-              this.$refs.wrapper.refresh();
-              this.$refs.wrapper.scrollToEnd();
-            }, 20);
-          }
+        }
+        //下拉加载更多不跳到最后
+        if (!this.hasPulldown) {
+          setTimeout(() => {
+            this.$refs.wrapper.refresh();
+            this.$refs.wrapper.scrollToEnd();
+          }, 20);
+        } else {
+          this.$nextTick(() => {
+            newVal.forEach(item => {
+              //这里有个bug 如果找到没有展示过的去展示的话 所以先全部渲染过一遍
+              if (item.type == "location") {
+                this.init(
+                  item.id,
+                  item.location.latlng.lat,
+                  item.location.latlng.lng
+                );
+                item.hasShowMap = true;
+              }
+            });
+          });
         }
       },
       deep: true
@@ -487,9 +502,9 @@ export default {
       this.showmap = false;
       this.$refs.wrapper.refresh();
       this.$refs.wrapper.scrollToEnd();
-      this.$nextTick(() => {
-        this.init(id, location.latlng.lat, location.latlng.lng);
-      });
+      // this.$nextTick(() => {
+      //   this.init(id, location.latlng.lat, location.latlng.lng);
+      // });
     },
     toNavigation(item) {
       console.log(item);
@@ -602,7 +617,10 @@ export default {
     //渲染历史聊天记录中的地址
     this.chat_item.chat_list.forEach(item => {
       if (item.type == "location") {
+        item.hasShowMap = false;
         this.init(item.id, item.location.latlng.lat, item.location.latlng.lng);
+        //方便在下拉加载更多的时候的历史聊天type为地图的项的渲染
+        item.hasShowMap = true;
       }
     });
     this.setScrollHeight();

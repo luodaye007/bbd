@@ -133,9 +133,7 @@ export function syncChatList(chat_list) {
             try {
                 item.chat_list.forEach((chat_item, index) => {
                     //找到拼接的点  只需要找到缓存中最后的一个元素的id位于vuex中第几个 然后把这些值砍掉 然后接上缓存的
-                    console.log(index)
                     if (map[item.username].chat_list[map[item.username].chat_list.length - 1].time === chat_item.time) {
-                        console.log(index)
                         throw new Error(index);
                     }
                 })
