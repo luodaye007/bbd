@@ -106,3 +106,43 @@ export async function getLocation(store, cb) {
         }
     });
 }
+
+export function getChatList() {
+    let chat_list = JSON.parse(window.localStorage.getItem('chat_list')) || [];
+    chat_list.forEach(item => {
+        if (item.chat_list.length > 10) {
+            //只取后十条
+            item.chat_list = item.chat_list.slice(-10);
+        }
+    })
+    return chat_list;
+}
+
+export function syncChatList(chat_list) {
+    let chat_list_in_storage = JSON.parse(window.localStorage.getItem('chat_list')) || [];
+    //转化下数据 转化为map比较好对比找出对应的项(以username为key)
+    let map = {};
+    chat_list_in_storage.forEach(item => {
+        map[item.username] = item;
+    })
+
+    //聊天项以vuex的为基准，聊天内容以vuex+storage去重为基准
+    chat_list.forEach(item => {
+        //item.chat_list
+        if (map[item.username]) {
+            try {
+                item.chat_list.forEach((chat_item, index) => {
+                    //找到拼接的点  只需要找到缓存中最后的一个元素的id位于vuex中第几个 然后把这些值砍掉 然后接上缓存的
+                    console.log(index)
+                    if (map[item.username].chat_list[map[item.username].chat_list.length - 1].time === chat_item.time) {
+                        console.log(index)
+                        throw new Error(index);
+                    }
+                })
+            } catch (error) {
+                item.chat_list = map[item.username].chat_list.concat(item.chat_list.slice(parseInt(error.message) + 1));
+            }
+        }
+    })
+    return chat_list;
+}

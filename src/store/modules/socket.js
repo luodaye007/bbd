@@ -2,10 +2,11 @@
 import types from "@/store/types";
 import router from '@/router';
 import { Toast } from 'vant';
+import { getChatList } from "@/utils";
 
 const state = {
     socketState: false,
-    chat_list: JSON.parse(window.localStorage.getItem('chat_list')) || [],
+    chat_list: getChatList(),
     comment_list: JSON.parse(window.localStorage.getItem('comment_list')) || [],//评论或者赛事申请
     has_apply_game: JSON.parse(window.localStorage.getItem('has_apply_game')) || []//申请过的赛事
 }
@@ -111,11 +112,12 @@ const mutations = {
             if (state.chat_list[i].username == data.send_info.username) { //如果已经存在聊天对话框
                 if (!flag) {
                     state.chat_list[i].unread_num++;
-                    //state.chat_list = JSON.parse(JSON.stringify(state.chat_list));
                 }
+
                 state.chat_list[i].chat_list.push(data);
                 //置顶
                 state.chat_list.unshift(state.chat_list.splice(i, 1)[0]);
+                //state.chat_list = JSON.parse(JSON.stringify(state.chat_list));
                 return;
             }
         }

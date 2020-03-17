@@ -12,6 +12,7 @@
 <script>
 import VanTabbar from "@/components/VanTabbar";
 import GetLocation from "@/components/GetLocation";
+import { syncChatList } from "@/utils";
 export default {
   name: "App",
   data() {
@@ -35,21 +36,24 @@ export default {
   },
   created() {
     //解决页面刷新vuex丢失
-
+    //syncChatList(this.$store.state.socket.chat_list);
     let store = window.sessionStorage.getItem("store");
     if (store !== null) {
       this.$store.replaceState(
         Object.assign({}, this.$store.state, JSON.parse(store))
       );
     }
-    //在页面刷新时将vuex里的信息保存到sessionStorage里
+
     window.addEventListener("beforeunload", () => {
       this.$store.commit("socketStateChange", false);
       sessionStorage.setItem("store", JSON.stringify(this.$store.state));
 
+      //因为初始化中vuex默认只保存十条记录 因此这里需要同步一下可能变化的聊天内容
+      //syncChatList(this.$store.state.socket.chat_list);
+
       window.localStorage.setItem(
         "chat_list",
-        JSON.stringify(this.$store.state.socket.chat_list)
+        JSON.stringify(syncChatList(this.$store.state.socket.chat_list))
       );
 
       window.localStorage.setItem(

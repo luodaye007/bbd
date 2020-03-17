@@ -76,12 +76,6 @@
               v-if="chat_item.chat_list[index].time>chat_item.chat_list[index-1].time+1000*60*5"
             >{{item.time | moment("calendar")}}</div>
           </template>
-          <!-- <template v-else>
-            <div
-              class="date"
-              v-if="index==chat_item.chat_list.length-1"
-            >{{item.time | moment("calendar")}}</div>
-          </template>-->
         </div>
         <div class="cu-item" v-else>
           <div class="cu-avatar radius" :style="{backgroundImage: 'url(' + chat_item.avatar + ')'}"></div>
@@ -139,7 +133,7 @@
       <div class="cu-bar input" ref="input">
         <div
           class="cu-avatar round"
-          style="background-image:url(https://image.weilanwl.com/img/square-3.jpg);margin-left:.2rem;"
+          :style="{backgroundImage: 'url(' + selfUserInfo.avatar + ')',marginLeft:'.2rem'}"
         ></div>
         <div class="action">
           <span class="icon-roundaddfill span-grey"></span>
@@ -162,12 +156,14 @@
           <van-grid-item icon="envelop-o" text="赛事" @click="gameShow" />
           <van-grid-item icon="location-o" text="发送位置" @click="showmap = true;" />
           <van-grid-item icon="goods-collect-o" text="装备" @click="equipmentShow" />
-          <van-grid-item icon="photo-o" text="图片" />
+          <van-grid-item icon="photo-o" text="图片" @click="uploadImg" />
           <van-grid-item icon="photo-o" text="图片" />
           <van-grid-item icon="photo-o" text="图片" />
         </van-grid>
       </div>
     </div>
+
+    <img-cut @callback="callback" :width="130" :height="130"></img-cut>
 
     <van-popup v-model="showmap" :style="{ width:'100%', height: '100%' }">
       <TencentMapChooseLocation v-bind:showmap.sync="showmap" @location="backLocation"></TencentMapChooseLocation>
@@ -258,11 +254,13 @@ import Scroll from "@/components/Scroll";
 import { ip } from "@/config";
 import { equipmentRequest, gameRequest } from "@/api";
 import { sillyDay1 } from "@/utils";
+import { imgCut } from "vue-imgcut";
 export default {
   components: {
     "van-nav-bar": VanNavBar,
     scroll: Scroll,
-    TencentMapChooseLocation
+    TencentMapChooseLocation,
+    "img-cut": imgCut
   },
   data() {
     return {
@@ -281,8 +279,9 @@ export default {
       hasGetGame: false,
       selectEquipmentIndex: -1,
       selectGameIndex: -1,
-      page: 0,
-      hasPulldown: false
+      page: 1, //记录获取的历史聊天页数 默认获取十条
+      hasPulldown: false,
+      chat_item_copy: {}
     };
   },
   computed: {
@@ -316,7 +315,6 @@ export default {
               this.$refs.wrapper.scrollToEnd();
             }, 20);
           }
-          //this.$forceUpdate();
         }
       },
       deep: true
@@ -325,6 +323,12 @@ export default {
   methods: {
     sillyDay(timeStamp) {
       return sillyDay1(timeStamp);
+    },
+    callback(img) {
+      console.log(img);
+    },
+    uploadImg() {
+      this.$el.querySelector(".file").click();
     },
     jumpToGame(game_id) {
       this.$router.push({ name: "ShowGame", query: { game_id } });
@@ -429,7 +433,6 @@ export default {
     send(data, type) {
       this.$socket.emit("chat", data);
       this.chat_item.chat_list.push(data);
-      this.chat_item_copy.chat_list.push(data);
       if (type == "text") {
         this.inputValue = "";
       } else if (type == "equipment") {
@@ -480,7 +483,6 @@ export default {
       this.$socket.emit("chat", data);
 
       this.chat_item.chat_list.push(data);
-      this.chat_item_copy.chat_list.push(data);
 
       this.showmap = false;
       this.$refs.wrapper.refresh();
@@ -552,6 +554,7 @@ export default {
 
     getMoreRecord() {
       let allLength = this.chat_item_copy.chat_list.length;
+
       this.page++;
       if (allLength === this.chat_item.chat_list.length) {
         //关闭下加载更多
@@ -560,16 +563,10 @@ export default {
         return;
       }
       if (allLength >= this.page * 10) {
-        if (this.page === 1) {
-          this.chat_item.chat_list = this.chat_item_copy.chat_list
-            .slice(-this.page * 10)
-            .concat(this.chat_item.chat_list);
-        } else {
-          let endIndex = this.page - 1;
-          this.chat_item.chat_list = this.chat_item_copy.chat_list
-            .slice(-this.page * 10, -endIndex * 10)
-            .concat(this.chat_item.chat_list);
-        }
+        let endIndex = this.page - 1;
+        this.chat_item.chat_list = this.chat_item_copy.chat_list
+          .slice(-this.page * 10, -endIndex * 10)
+          .concat(this.chat_item.chat_list);
       } else {
         let endIndex = this.page - 1;
         this.chat_item.chat_list = this.chat_item_copy.chat_list
@@ -581,20 +578,23 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
     let username = this.$route.query.username;
+    //找出当前的聊天信息项
     this.$store.state.socket.chat_list.forEach((element, index) => {
       if (element.username == username) {
-        //保存原本的信息 用于同步更新
-        this.chat_item_copy = element;
-        this.chat_item = Object.assign({}, element);
-        //先清空 然后逐渐加
-        this.chat_item.chat_list = [];
-        this.getMoreRecord();
+        this.chat_item = element;
+
         this.$store.commit("clear_unread_num", index);
         //置顶
         this.$store.commit("chat_list_to_top", index);
         //this.chatRecord = element.chat_list;
       }
     });
+    //缓存当前聊天项的所有内容
+    let chat_list = JSON.parse(window.localStorage.getItem("chat_list")) || [];
+    this.chat_item_copy = chat_list.filter(
+      item => item.username === username
+    )[0];
+
     document.getElementsByTagName("body")[0].style.overflow = "hidden";
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
