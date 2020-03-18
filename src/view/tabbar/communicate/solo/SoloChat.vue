@@ -156,14 +156,12 @@
           <van-grid-item icon="envelop-o" text="赛事" @click="gameShow" />
           <van-grid-item icon="location-o" text="发送位置" @click="showmap = true;" />
           <van-grid-item icon="goods-collect-o" text="装备" @click="equipmentShow" />
-          <van-grid-item icon="photo-o" text="图片" @click="uploadImg" />
+          <van-grid-item icon="photo-o" text="图片" />
           <van-grid-item icon="photo-o" text="图片" />
           <van-grid-item icon="photo-o" text="图片" />
         </van-grid>
       </div>
     </div>
-
-    <img-cut @callback="callback" :width="130" :height="130"></img-cut>
 
     <van-popup v-model="showmap" :style="{ width:'100%', height: '100%' }">
       <TencentMapChooseLocation v-bind:showmap.sync="showmap" @location="backLocation"></TencentMapChooseLocation>
@@ -259,8 +257,7 @@ export default {
   components: {
     "van-nav-bar": VanNavBar,
     scroll: Scroll,
-    TencentMapChooseLocation,
-    "img-cut": imgCut
+    TencentMapChooseLocation
   },
   data() {
     return {
@@ -338,12 +335,6 @@ export default {
   methods: {
     sillyDay(timeStamp) {
       return sillyDay1(timeStamp);
-    },
-    callback(img) {
-      console.log(img);
-    },
-    uploadImg() {
-      this.$el.querySelector(".file").click();
     },
     jumpToGame(game_id) {
       this.$router.push({ name: "ShowGame", query: { game_id } });

@@ -31,18 +31,11 @@
           <span @click="show = true">筛选</span>
         </div>
       </div>
-      <!-- <div class="line"></div> -->
-      <!-- <van-dropdown-menu>
-        <van-dropdown-item v-model="district" :options="districtOption" @change="dropdownChange" />
-        <van-dropdown-item v-model="game_type" :options="typeOption" @change="dropdownChange" />
-        <van-dropdown-item v-model="duration" :options="durationOption" @change="dropdownChange" />
-      </van-dropdown-menu>-->
     </div>
 
     <div class="game-body">
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-          <!-- <van-cell v-for="item in list" :key="item.game_id" :title="item.game_id" /> -->
           <div class="game-list">
             <div
               class="game-item"

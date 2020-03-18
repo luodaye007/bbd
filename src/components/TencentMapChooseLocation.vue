@@ -20,8 +20,7 @@
 </template>
 
 <script>
-import VanNavBar from "@/components/VanNavBar";
-import { getAddress } from "@/api";
+import { locationRequest } from "@/api";
 export default {
   props: ["showmap"],
   components: {},
@@ -36,11 +35,33 @@ export default {
     onClickLeft() {
       this.$emit("update:showmap", false);
     },
-    onClickRight() {
+    async onClickRight() {
       //Toast("按钮");
       if (Object.keys(this.locationSelect).length == 0) {
         this.$toast("请选择地址");
         return;
+      }
+
+      if (this.locationSelect.poiname === "我的位置") {
+        //选择了我的位置需要特殊处理
+        locationRequest
+          .changeLocation(
+            this.locationSelect.latlng.lat,
+            this.locationSelect.latlng.lng
+          )
+          .then(res => {
+            console.log(res);
+          });
+
+        let result = (
+          await locationRequest.changeLocation(
+            this.locationSelect.latlng.lat,
+            this.locationSelect.latlng.lng
+          )
+        ).data.result.data.result;
+        this.locationSelect.poiaddress = result.address;
+
+        this.locationSelect.poiname = result.formatted_addresses.recommend;
       }
 
       this.$emit("location", this.locationSelect);
@@ -59,7 +80,7 @@ export default {
         var loc = event.data;
         if (loc && loc.module == "locationPicker") {
           //防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
-          console.log(loc)
+          console.log(loc);
           that.locationSelect = loc;
           //console.log(loc);
         }

@@ -10,6 +10,7 @@ import concernRequest from './concern';
 import gameRequest from './game';
 import equipmentRequest from './equipment';
 import commentRequest from './comment';
+import locationRequest from './location';
 
 //Axios.defaults.withCredentials = true; //让ajax携带cookie
 
@@ -45,4 +46,4 @@ instance.interceptors.response.use(
 
 export default instance;
 
-export { baseRequest, concernRequest, gameRequest, equipmentRequest, commentRequest };
+export { baseRequest, concernRequest, gameRequest, equipmentRequest, commentRequest, locationRequest };
