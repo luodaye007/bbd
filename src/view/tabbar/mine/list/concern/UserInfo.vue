@@ -299,7 +299,6 @@ export default {
   width: 50%;
 }
 .static {
-  color: #ccc;
 }
 .info {
   padding: 0.2rem;

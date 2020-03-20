@@ -314,18 +314,18 @@ export default {
             this.$refs.wrapper.scrollToEnd();
           }, 20);
         } else {
-          this.$nextTick(() => {
-            newVal.forEach(item => {
-              //这里有个bug 如果找到没有展示过的去展示的话 所以先全部渲染过一遍
-              if (item.type == "location") {
+          newVal.forEach(item => {
+            //这里有个bug 如果找到没有展示过的去展示的话 所以先全部渲染过一遍
+            if (item.type == "location" && !item.hasShowMap) {
+              this.$nextTick(() => {
                 this.init(
                   item.id,
                   item.location.latlng.lat,
                   item.location.latlng.lng
                 );
                 item.hasShowMap = true;
-              }
-            });
+              });
+            }
           });
         }
       },
@@ -480,8 +480,7 @@ export default {
           nickname: this.selfUserInfo.nickname
         },
         receive_id: this.chat_item.username,
-        time: new Date(),
-        time: time,
+        time: time.getTime(),
         type: "location",
         location: location,
         id: id
@@ -519,7 +518,8 @@ export default {
         zoom: 20, //设置地图缩放级别
         center: myLatlng, //设置中心点样式
         mapTypeId: qq.maps.MapTypeId.ROADMAP, //设置地图样式详情参见MapType
-        disableDefaultUI: true //禁止所有控件
+        disableDefaultUI: true, //禁止所有控件
+        draggable: false
       };
       //获取dom元素添加地图信息
       var map = new qq.maps.Map(document.getElementById(id), myOptions);
@@ -530,25 +530,25 @@ export default {
         alert("您点击了地图.");
       });
 
-      var marker = new qq.maps.Marker({
-        position: myLatlng,
-        map: map
-      });
-      var anchor = new qq.maps.Point(0, 39),
-        size = new qq.maps.Size(42, 68),
-        origin = new qq.maps.Point(0, 0),
-        markerIcon = new qq.maps.MarkerImage(
-          ip + "/public/images/marker.png",
-          size,
-          origin,
-          anchor
-        );
-      marker.setIcon(markerIcon);
+      // var marker = new qq.maps.Marker({
+      //   position: myLatlng,
+      //   map: map
+      // });
+      // var anchor = new qq.maps.Point(0, 39),
+      //   size = new qq.maps.Size(42, 68),
+      //   origin = new qq.maps.Point(0, 0),
+      //   markerIcon = new qq.maps.MarkerImage(
+      //     ip + "/public/images/marker.png",
+      //     size,
+      //     origin,
+      //     anchor
+      //   );
+      // marker.setIcon(markerIcon);
 
-      //获取标记的点击事件
-      qq.maps.event.addListener(marker, "click", function() {
-        console.log(marker);
-      });
+      // //获取标记的点击事件
+      // qq.maps.event.addListener(marker, "click", function() {
+      //   console.log(marker);
+      // });
     },
     fixScroll() {
       let u = navigator.userAgent;
@@ -560,7 +560,6 @@ export default {
 
     getMoreRecord() {
       let allLength = this.chat_item_copy.chat_list.length;
-
       this.page++;
       if (allLength === this.chat_item.chat_list.length) {
         //关闭下加载更多
@@ -573,6 +572,13 @@ export default {
         this.chat_item.chat_list = this.chat_item_copy.chat_list
           .slice(-this.page * 10, -endIndex * 10)
           .concat(this.chat_item.chat_list);
+        // let addArr = this.chat_item_copy.chat_list.slice(
+        //   -this.page * 10,
+        //   -endIndex * 10
+        // );
+        // for (var i = addArr.length - 1; i >= 0; i--) {
+        //   this.chat_item.chat_list.push(addArr[i]);
+        // }
       } else {
         let endIndex = this.page - 1;
         this.chat_item.chat_list = this.chat_item_copy.chat_list

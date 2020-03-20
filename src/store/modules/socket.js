@@ -40,6 +40,10 @@ const mutations = {
     socket_reconnect(state, data) {
         console.log("重新连接" + data);
     },
+    socket_reconnecting(state, data) {
+        console.log("重新连接中" + data);
+        Toast('重新连接中')
+    },
     socket_disconnect(state) {
         console.log("断开连接");
         state.socketState = false;

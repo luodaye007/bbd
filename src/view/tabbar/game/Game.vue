@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <div class="game-body">
+    <div class="game-body" ref="wrapper">
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
           <div class="game-list">
@@ -295,7 +295,8 @@ export default {
       finished: false,
       count: 0,
       page: 1,
-      isLoading: false
+      isLoading: false,
+      scrollTop: 0
     };
   },
   computed: {
@@ -419,9 +420,9 @@ export default {
           this.list = this.list.concat(res.data.rows);
 
           //排序
-          if (this.game_part == "推荐") {
-            this.list = quickSort(this.list);
-          }
+          // if (this.game_part == "推荐") {
+          //   this.list = quickSort(this.list);
+          // }
 
           this.finished = this.list.length == this.count ? true : false;
         });
@@ -483,10 +484,22 @@ export default {
             });
         }
       }
+    },
+    recordScrollPosition(e) {
+      //console.log(e.target)
+      this.scrollTop = e.target.scrollTop;
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {}
+  created() {},
+  activated() {
+    this.$refs.wrapper.scrollTop = this.scrollTop;
+    this.$refs.wrapper.addEventListener("scroll", this.recordScrollPosition);
+  },
+  deactivated() {
+    //keep-alive 的页面跳转时，移除scroll事件
+    this.$refs.wrapper.removeEventListener("scroll", this.recordScrollPosition); //清除绑定的scroll事件
+  }
 };
 </script>
 <style scoped lang="less">
@@ -622,6 +635,7 @@ export default {
 .game_type {
   font-size: 0.6rem;
   font-weight: bold;
+  text-align: center;
 }
 .typeandduration {
   display: flex;
@@ -652,7 +666,7 @@ export default {
   display: flex;
   flex-direction: column;
   border-left: 2px solid #ccc;
-  padding-left: 1rem;
+  padding-left: 0.6rem;
 }
 .link-img {
   position: absolute;
@@ -727,7 +741,7 @@ export default {
 .game-header-select {
   display: flex;
   justify-content: space-between;
-  margin: 0.1rem 0.3rem 0.1rem;
+  margin: 0.1rem 0.3rem 0rem;
   border-bottom: 1px solid #ccc;
   padding-bottom: 0.15rem;
 }
