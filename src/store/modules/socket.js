@@ -2,6 +2,7 @@
 import types from "@/store/types";
 import router from '@/router';
 import { Toast } from 'vant';
+import { Dialog } from 'vant';
 import { getChatList } from "@/utils";
 
 const state = {
@@ -57,6 +58,13 @@ const mutations = {
         this.dispatch('logOut').then(() => {
             router.push({ name: 'Login' });
             Toast.fail('验证失败');
+        })
+    },
+    socket_client_logout() {
+        console.log('被逼下线了呢');
+        Dialog({ message: '已在其他设备上登录' });
+        this.dispatch('logOut').then(() => {
+            router.push({ name: 'Login', query: { logOutMsg: 'socket_client_logout' } });
         })
     },
     socket_accept_offline_msg(state, data) {
