@@ -215,14 +215,13 @@ export default {
   height: 100%;
 }
 .chat-item-left {
-  width: 3rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 .chat-item-middle {
-  width: 100%;
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -231,8 +230,8 @@ export default {
   justify-content: flex-start;
 }
 .chat-item-right {
-  width: 3rem;
-  min-width: 60px;
+  // width: 3rem;
+  // min-width: 60px;
 }
 .ago {
   position: relative;

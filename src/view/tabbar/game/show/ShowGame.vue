@@ -62,7 +62,7 @@
           <th>位置</th>
         </tr>
         <tr v-for="(item,index) in game.game_athletes" :key="index">
-          <td>{{item.user.nickname}}</td>
+          <td @click="showUser(item.username)">{{item.user.nickname}}</td>
           <td>{{item.user.orientation}}</td>
         </tr>
       </table>
@@ -323,7 +323,8 @@ export default {
       message: "加载中...",
       duration: 0
     });
-    gameRequest.showGame(game_id)
+    gameRequest
+      .showGame(game_id)
       .then(res => {
         console.log(res);
         this.game = res.data.game;

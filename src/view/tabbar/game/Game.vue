@@ -4,8 +4,8 @@
     <div class="game-header">
       <div class="search-bar">
         <form action="/">
-          <span>{{$store.state.user.location.district}}</span>
           <van-search
+            :label="$store.state.user.location.district+'|'"
             v-model="keyword"
             placeholder="请输入人名"
             show-action

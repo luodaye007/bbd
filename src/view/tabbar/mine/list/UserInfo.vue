@@ -176,7 +176,9 @@ export default {
         message: "上传中..."
       });
       var formData = new FormData();
+
       formData.append("avatar", this.base64toFile(img));
+      alert(this.base64toFile(img));
       baseRequest
         .uploadAvatar(formData)
         .then(res => {

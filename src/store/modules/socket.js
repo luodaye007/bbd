@@ -205,10 +205,15 @@ const mutations = {
     },
     update_chat_list_user(state, arr) {
         //目前只更新用户的头像，昵称，标签
-        state.chat_list.forEach((item, index) => {
-            item.avatar = arr[index].avatar;
-            item.nickname = arr[index].nickname;
-            item.tag = arr[index].tag;
+        let map = {};
+        arr.forEach(item => {
+            map[item.username] = item;
+        })
+        state.chat_list.forEach(item => {
+            let flag = map[item.username];
+            item.avatar = flag.avatar;
+            item.nickname = flag.nickname;
+            item.tag = flag.tag;
         })
     }
 }
