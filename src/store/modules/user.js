@@ -95,6 +95,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             baseRequest.getUserInfo(username).then(res => {
                 if (res.status === 200) {
+                    console.log(res)
                     commit(types.LOGINSTATUS, true);
                     commit('USERINFO', res.data.userInfo);
                     commit('CONCERN', res.data.userInfo.concerns);

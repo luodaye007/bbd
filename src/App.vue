@@ -44,12 +44,30 @@ export default {
       );
     }
 
-    window.addEventListener("beforeunload", () => {
+    // window.addEventListener("beforeunload", () => {
+    //   this.$store.commit("socketStateChange", false);
+    //   sessionStorage.setItem("store", JSON.stringify(this.$store.state));
+
+    //   window.localStorage.setItem(
+    //     "chat_list",
+    //     JSON.stringify(syncChatList(this.$store.state.socket.chat_list))
+    //   );
+
+    //   window.localStorage.setItem(
+    //     "comment_list",
+    //     JSON.stringify(this.$store.state.socket.comment_list)
+    //   );
+
+    //   window.localStorage.setItem(
+    //     "has_apply_game",
+    //     JSON.stringify(this.$store.state.socket.has_apply_game)
+    //   );
+    // });
+
+    //解决ios移动端不支持beforeunload
+    window.addEventListener("pagehide", () => {
       this.$store.commit("socketStateChange", false);
       sessionStorage.setItem("store", JSON.stringify(this.$store.state));
-
-      //因为初始化中vuex默认只保存十条记录 因此这里需要同步一下可能变化的聊天内容
-      //syncChatList(this.$store.state.socket.chat_list);
 
       window.localStorage.setItem(
         "chat_list",
@@ -65,8 +83,6 @@ export default {
         "has_apply_game",
         JSON.stringify(this.$store.state.socket.has_apply_game)
       );
-
-      //window.localStorage.removeItem("has_apply_game");
     });
 
     if (window.localStorage.token) {

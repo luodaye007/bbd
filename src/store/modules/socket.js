@@ -5,6 +5,8 @@ import { Toast } from 'vant';
 import { Dialog } from 'vant';
 import { getChatList } from "@/utils";
 
+// window.localStorage.setItem('a', 111)
+
 const state = {
     socketState: false,
     chat_list: getChatList(),
