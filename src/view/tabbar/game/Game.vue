@@ -5,7 +5,7 @@
       <div class="search-bar">
         <form action="/">
           <van-search
-            :label="$store.state.user.location.district+'|'"
+            :label="$store.state.user.location.district"
             v-model="keyword"
             placeholder="请输入人名"
             show-action
