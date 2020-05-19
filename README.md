@@ -1,24 +1,56 @@
-# bbd
+# bbd运行说明
 
-> A Vue.js project
+# 客户端（client）
 
-## Build Setup
-
-``` bash
-# install dependencies
+## install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+## serve with hot reload at （你的局域网ip地址）:8080
 npm run dev
 
-# build for production with minification
-npm run build
+## /src/config/index.js
+修改你的网络请求baseUrl（查看局域网网络地址）
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+# 服务端(serve)
+
+## install dependencies
+npm install
+
+## mysql设置
+
+### 创建数据库
+新增数据库bbd
+
+### 数据库配置
+/config/config.default.js文件中：
+config.sequelize对象中键database:'bbd'（设置数据库名）
+username:'root'（设置数据库用户名）
+password:'684319'（设置数据库连接密码）
+host:'127.0.0.1'（设置数据库地址）
+
+### 模型及数据生成
+/app.js中 注销app.beforeStart中的代码即可重新生成表模型和数据
+
+## redis设置
+
+### 确保安装了redis并且开启了redis服务
+如标题
+
+### redis配置
+/config/config.default.js文件中：config.redis对象中：
+port: 6379（端口号）
+host: '127.0.0.1'（连接地址）
+password: '684319'（密码）
+db: 0（数据库）
+
+## serve with hot reload at 127.0.0.1:7002
+npm run dev
+
+## 账号（假数据）
+1. 账号：863231099 密码：684319
+2. 账号：777777 密码：777777
 
 # 林钜隆-毕设作品-前端页面展示
 
